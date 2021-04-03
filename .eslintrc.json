@@ -1,0 +1,20 @@
+{
+    "extends": ["airbnb", "prettier"],
+    "plugins": ["prettier"],
+    "rules": {
+      "prettier/prettier": ["error"],
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    },
+    
+    "parserOptions": {
+        "ecmaFeatures": {
+          "jsx": true,
+          "modules": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "project": ["./tsconfig.json"],
+        "extraFileExtensions": [".md", ".mdx", ".json"]
+      }
+  }
+
