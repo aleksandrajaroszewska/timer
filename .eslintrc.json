@@ -1,24 +1,63 @@
 {
-    "extends": ["airbnb", "prettier"],
-    "plugins": ["prettier"],
+    "extends": ["airbnb", "prettier", "eslint:recommended",
+      "plugin:react/recommended"],
+    "plugins": ["prettier", "react", "@typescript-eslint"],
     "rules": {
-      "prettier/prettier": ["error"],
-      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "react/state-in-constructor": ["warn", "never"],
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
+      "@typescript-eslint/rule-name": "off",
+      "no-mixed-operators": "error",
+      "no-console": "off",
+      "no-undef": "off",
+      "react/prop-types": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/indent": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/explicit-member-accessibility": "off",
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/no-use-before-define": "off",
+      "@typescript-eslint/no-object-literal-type-assertion": "off",
+      "@typescript-eslint/no-parameter-properties": "off",
+      "@typescript-eslint/dot-notation": 0,
+      "@typescript-eslint/no-implied-eval": 0,
+      "@typescript-eslint/no-throw-literal": 0,
+      "@typescript-eslint/no-unused-expressions": 0,
+      "react/jsx-indent": 0,
+      "import/no-extraneous-dependencies": 0,
+      "no-alert": 0,
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto",
+          "usePrettierrc": true
+        }
+      ]  
     },
     "env": {
       "browser": true,
       "es6": true,
       "jest": true
     },
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaFeatures": {
+      "ecmaVersion": 2020,
+      "requireConfigFile": false,
+      "sourceType": "module",
+      "ecmaFeatures": {
           "jsx": true,
           "modules": true
-        },
-        "ecmaVersion": 2018,
-        "sourceType": "module",
-        "extraFileExtensions": [".md", ".mdx", ".json"]
       }
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "17.0.2"
+    }
+  }
+ 
   }
 
