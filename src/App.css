@@ -3,7 +3,9 @@
   margin: 0 auto;
   color: white;
 
+
 }
+h1 {color: black}
 
 .editor {
   background-color: crimson;
@@ -29,6 +31,14 @@ button {
   align-items:center;
   padding: 30px;
   border-radius: 5px;
+
+}
+.task {
+  border: 1px solid black;
+  border-radius: 8px;
+  padding:30px;
+  color: black;
+
 
 }
 label {
