@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Clock from '../atoms/Clock';
 import ProgressBar from '../atoms/ProgressBar';
-/* eslint-disable func-names */
+
 /* eslint-disable react/prop-types */
 
 class Timer extends Component {
@@ -12,6 +12,22 @@ class Timer extends Component {
     pausesCount: 0,
     elapsedTime: 0,
   };
+
+  componentDidMount() {
+    this.intervalId = null;
+  }
+
+  componentDidUpdate(prevState) {
+    const { title, totalTime } = this.props;
+
+    if (title !== prevState.title || totalTime !== prevState.totalTime) {
+      this.handleStop();
+    }
+  }
+
+  componentWillUnmount() {
+    this.stopTimer();
+  }
 
   handleStart = () => {
     this.setState({ isRunning: true });
@@ -29,14 +45,12 @@ class Timer extends Component {
   };
 
   togglePause = () => {
-    this.setState(function (prevState) {
+    this.setState((prevState) => {
       const isPaused = !prevState.isPaused;
-      console.log(isPaused);
+
       if (isPaused) {
-        console.log(this.intervalId, 'start pause');
         this.stopTimer();
       } else {
-        console.log(this.intervalId, 'stop pause');
         this.startTimer();
       }
       return {
@@ -47,17 +61,20 @@ class Timer extends Component {
   };
 
   startTimer() {
-    this.intervalId = window.setInterval(() => {
-      console.log(this.intervalId);
-      this.setState((prevState) => ({
-        elapsedTime: prevState.elapsedTime + 0.1,
-      }));
-    }, 100);
+    if (this.intervalId === null) {
+      this.intervalId = window.setInterval(() => {
+        console.log('timer started');
+        this.setState((prevState) => ({
+          elapsedTime: prevState.elapsedTime + 0.1,
+        }));
+      }, 100);
+    }
   }
 
   stopTimer() {
-    console.log(this.intervalId);
+    console.log('timer ends');
     window.clearInterval(this.intervalId);
+    this.intervalId = null;
   }
 
   render() {
@@ -68,6 +85,30 @@ class Timer extends Component {
     const minutesLeft = Math.floor(leftTime / 60);
     const secondsLeft = Math.floor(leftTime % 60);
     const percentProgress = (elapsedTime / totalTime) * 100.0;
+
+    if (isEditable) {
+      this.stopTimer();
+    }
+
+    // log cheetsheet
+    // console.group('group');
+    // console.log({ totalTime, secondsLeft });
+    // console.groupCollapsed('collapsed');
+    // console.info('this is info');
+    // console.debug('this is debug');
+    // console.warn('this is warn');
+    // console.error('this is erroe');
+    // console.groupEnd('end');
+    // console.table('to log array');
+    // console.trace('this is stack trace');
+    // console.groupEnd('end');
+    // console.count('count render');
+    // console.log(
+    //   '%c tralaalalall kokoko  %c tetetet %c tetststt',
+    //   'color: green',
+    //   'color: pink',
+    //   'background:blue'
+    // );
 
     return (
       <div className={isEditable ? 'inactive timer' : 'timer'}>

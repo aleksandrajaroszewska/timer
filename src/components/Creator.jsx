@@ -7,21 +7,36 @@ const Creator = ({
   onCreate,
   onCurrentTimeChange,
   onCurrentTitleChange,
+  inactive,
+  onEdit,
 }) => {
   return (
     <div className="editor">
-      <label>
+      <label className={inactive ? ' inactive' : ''}>
         Co robisz?
-        <input value={currentTitle} onChange={onCurrentTitleChange} type="text" />
+        <input
+          value={currentTitle}
+          onChange={onCurrentTitleChange}
+          disabled={inactive}
+          type="text"
+        />
       </label>
-      <br />
-      <label>
-        Ile minut?
-        <input value={currentTime} onChange={onCurrentTimeChange} type="number" />
+
+      <label className={inactive ? ' inactive' : ''}>
+        Ile sekund?
+        <input
+          value={currentTime}
+          onChange={onCurrentTimeChange}
+          type="number"
+          disabled={inactive}
+        />
       </label>
-      <br />
-      <button onClick={onCreate} type="button">
+
+      <button onClick={onCreate} type="button" disabled={inactive}>
         dodaj zadanie
+      </button>
+      <button onClick={onEdit} type="button" disabled={!inactive}>
+        edytuj
       </button>
     </div>
   );
