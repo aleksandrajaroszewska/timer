@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import Clock from '../atoms/Clock';
 import ProgressBar from '../atoms/ProgressBar';
 
+import { getMinutesAndSecondsFromDurationInSeconds } from '../helpers';
+
 /* eslint-disable react/prop-types */
 
 class Timer extends Component {
@@ -80,10 +82,10 @@ class Timer extends Component {
   render() {
     const { isPaused, isRunning, pausesCount, elapsedTime } = this.state;
     const { title, totalTime, isEditable } = this.props;
-
     const leftTime = totalTime - elapsedTime;
-    const minutesLeft = Math.floor(leftTime / 60);
-    const secondsLeft = Math.floor(leftTime % 60);
+
+    const [minutesLeft, secondsLeft] = getMinutesAndSecondsFromDurationInSeconds(leftTime);
+
     const percentProgress = (elapsedTime / totalTime) * 100.0;
 
     if (isEditable) {

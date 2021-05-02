@@ -1,10 +1,21 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import React from 'react';
+import { cleanup, render, screen } from '@testing-library/react';
+import Task from './atoms/Task';
+import Timer from './components/Timer';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders delete button', () => {
+  render(<Task />);
+  const button = screen.getByText('delete');
+  expect(button).toBeInTheDocument();
+});
+
+describe('timer', () => {
+  afterEach(cleanup);
+  it('renders', () => {
+    const { getByText } = render(<Timer />);
+
+    getByText('Stop');
+  });
 });
