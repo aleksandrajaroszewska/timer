@@ -6,6 +6,19 @@
 
 }
 h1 {color: black}
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:80%;
+  margin: 30px auto;
+  text-align:center;
+  border: 5px solid crimson;
+  border-radius: 5px;
+  padding-bottom: 30px;
+ 
+}
 
 .editor {
   background-color: crimson;
@@ -17,7 +30,7 @@ h1 {color: black}
 }
 button {
     height: 40px;
-    width:80px;
+    width:120px;
     background-color: white;
     border-radius: 5px;
     cursor: pointer;
@@ -76,6 +89,23 @@ input { margin-left: 20px; width:300px; height:40px;   border-radius: 5px;}
 
 .inactive {
   filter: blur(2px) grayscale(1)
+}
+
+.login-form {
+  border: 5px solid black;
+  width: 80%;
+  padding:30px;
+  margin: 50px auto;
+  border-radius: 5px;
+}
+.login-error {
+  font-size: 20px;
+  color: crimson;
+  border: 5px solid crimson;
+  padding: 30px;
+  font-weight:600;
+  text-align:center;
+  border-radius: 5px;
 }
 
 

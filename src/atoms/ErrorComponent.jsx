@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 
-class Error extends Component {
+class ErrorComponent extends Component {
   state = { hasError: false };
 
   static getDerivedStateFromError() {
@@ -21,4 +21,4 @@ class Error extends Component {
   }
 }
 
-export default Error;
+export default ErrorComponent;

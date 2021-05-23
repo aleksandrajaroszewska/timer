@@ -4,48 +4,76 @@ import React, { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Task from '../atoms/Task';
 import Creator from './Creator';
-import Error from '../atoms/Error';
-
+import ErrorComponent from '../atoms/ErrorComponent';
 import Timer from './Timer';
+import tasksApi from '../fetchTasks';
 /* eslint-disable func-names */
 /* eslint-disable react/prop-types */
 
 class Wrapper extends Component {
   state = {
     taskBoxes: [],
+    loading: true,
+    error: false,
     currentTitle: '',
     currentTime: '',
     currentTaskId: 0,
     isEditable: true,
   };
 
+  componentDidMount() {
+    const { accessToken } = this.props;
+    tasksApi
+      .getAllTasks(accessToken)
+      .then((taskBoxes) =>
+        this.setState({
+          taskBoxes,
+        })
+      )
+      // eslint-disable-next-line react/destructuring-assignment
+      .then(() => this.setState({ loading: false }));
+    // .cath(() => this.setState({ error: true }));
+  }
+
   addTask = (task) => {
-    this.setState((prevState) => {
-      const taskBoxes = [...prevState.taskBoxes, task];
-      return {
-        taskBoxes,
-      };
-    });
+    const { accessToken } = this.props;
+    tasksApi.addTask(task, accessToken).then(() =>
+      this.setState((prevState) => {
+        console.log({ prevState, task });
+        const taskBoxes = [...prevState.taskBoxes, task];
+        console.log([...prevState.taskBoxes, task]);
+        return { taskBoxes };
+      })
+    );
   };
 
   removeTask = (indexToRemove) => {
-    this.setState((prevState) => {
-      const taskBoxes = prevState.taskBoxes.filter((task, index) => index !== indexToRemove);
-      return {
-        taskBoxes,
-      };
-    });
+    const { accessToken } = this.props;
+    const { taskBoxes } = this.state;
+    tasksApi.removeTask(taskBoxes[indexToRemove], accessToken).then(() =>
+      this.setState((prevState) => {
+        const filteredTaskBoxes = prevState.taskBoxes.filter(
+          (task, index) => index !== indexToRemove
+        );
+        return {
+          taskBoxes: filteredTaskBoxes,
+        };
+      })
+    );
   };
 
-  updateTask = (indexToUpdate, updatedTask) => {
-    this.setState((prevState) => {
-      const taskBoxes = prevState.taskBoxes.map((task, index) => {
-        return index === indexToUpdate ? updatedTask : task;
-      });
-      return {
-        taskBoxes,
-      };
-    });
+  updateTask = (indexToUpdate, taskToUpdate) => {
+    const { accessToken } = this.props;
+    tasksApi.replaceTask(taskToUpdate, accessToken).then((updatedTask) =>
+      this.setState((prevState) => {
+        const taskBoxes = prevState.taskBoxes.map((task, index) => {
+          return index === indexToUpdate ? updatedTask : task;
+        });
+        return {
+          taskBoxes,
+        };
+      })
+    );
   };
 
   setCurrentTaskId = (currentTaskId) => {
@@ -62,11 +90,12 @@ class Wrapper extends Component {
       this.addTask({ id: uuidv4(), title: currentTitle, totalTime: currentTime });
       this.setState({ currentTitle: '', currentTime: '' });
     } catch (error) {
-      console.lgg('error');
+      console.lgg('error in creation task');
     }
   };
 
   onCurrentTimeChange = (event) => {
+    console.log('in time chaneg');
     this.setState({ currentTime: event.target.value });
   };
 
@@ -75,9 +104,18 @@ class Wrapper extends Component {
   };
 
   render() {
-    const { taskBoxes, currentTitle, currentTime, currentTaskId, isEditable } = this.state;
+    const {
+      taskBoxes,
+      currentTitle,
+      currentTime,
+      currentTaskId,
+      isEditable,
+      loading,
+      error,
+    } = this.state;
 
     const activeTask = taskBoxes.filter((task) => {
+      console.log(taskBoxes);
       if (task.id === currentTaskId) {
         return task;
       }
@@ -86,8 +124,7 @@ class Wrapper extends Component {
 
     return (
       <div className="main-wrapper">
-        <h1> co dziś zamierzasz zrobić ?</h1>
-        {activeTask.length > 0 && (
+        {activeTask && activeTask.length > 0 && (
           <Timer
             title={activeTask[0].title}
             totalTime={activeTask[0].totalTime}
@@ -104,8 +141,11 @@ class Wrapper extends Component {
           onEdit={this.onEdit}
         />
 
+        {loading ? 'timeboxy sie ładuję' : ''}
+        {error ? 'błąd' : ''}
+
         {taskBoxes.map((task, index) => (
-          <Error key={task.id} message="musisz dodać czas do odliczenia">
+          <ErrorComponent key={task.id} message="musisz dodać czas do odliczenia">
             <Task
               inactive={!isEditable}
               title={task.title}
@@ -120,7 +160,7 @@ class Wrapper extends Component {
               onChoose={() => this.setCurrentTaskId(task.id)}
               onEdit={this.onEdit}
             />
-          </Error>
+          </ErrorComponent>
         ))}
       </div>
     );
